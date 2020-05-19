@@ -145,6 +145,7 @@ public class TicTacToe {
    * @return The CellValue at that position
    */
   public CellValue valueAt(int position) {
+    position = position -1;
     if (position < 0 || position > ((this.board.length) - 1)){
        return CellValue.INVALID;
      }
@@ -154,7 +155,6 @@ public class TicTacToe {
      if (this.board[position] == 'O'){
        return CellValue.O;
      }
-     
      else {
        return CellValue.EMPTY;
      }
@@ -217,10 +217,10 @@ public class TicTacToe {
       view[1] = "Result: DRAW";
     }
     if (this.currentPlayer == CellValue.X || this.currentPlayer == CellValue.EMPTY){
-      view[1] = "X to play:";
+      view[1] = "X to play: ";
     }
     if (this.currentPlayer == CellValue.O) {
-      view[1] = "O to play:";
+      view[1] = "O to play: ";
     }
     
     return view;
@@ -258,7 +258,7 @@ public class TicTacToe {
    * @return A message about the current play (see tests for details)
    */
   public String play(int position) {
-    position = position -1;
+    // position = position -1;
     String message = "";
     if(valueAt(position) == CellValue.INVALID){
       message = "The value should be between 1 and " + this.board.length;
@@ -279,8 +279,9 @@ public class TicTacToe {
           this.currentPlayer = nextPlayer();
         }
         
-        this.board[position] = 'X';
+        this.board[position - 1] = 'X';
         // this.currentPlayer = nextPlayer();
+
         
         if(checkForWinner(position) == GameState.XWIN){
           this.gameState = GameState.XWIN;
@@ -304,7 +305,7 @@ public class TicTacToe {
 
       if (this.currentPlayer == CellValue.O) {
 
-        this.board[position] = 'O';
+        this.board[position - 1] = 'O';
         // this.currentPlayer = nextPlayer();
         
 
