@@ -61,7 +61,7 @@ public class TicTacToe {
   /**
    * Who is the current player?
    */
-  char currentPlayer;
+  CellValue currentPlayer;
 
 
   /**
@@ -75,7 +75,7 @@ public class TicTacToe {
     this.numRounds = 0;
     this.sizeToWin = 3;
     this.gameState = "PLAYING";
-    this.currentPlayer = 'X';
+    this.currentPlayer = CellValue.EMPTY;
 
     for (int i = 0; i < 9; i++){
       this.board[i] = ' ';
@@ -97,7 +97,7 @@ public class TicTacToe {
     this.numRounds = 0;
     this.sizeToWin = aSizeToWin;
     this.gameState = "PLAYING";
-    this.currentPlayer = 'X';
+    this.currentPlayer = CellValue.EMPTY;
 
     for (int i = 0; i < (aNumColumns * aNumRows); i++){
       this.board[i] = ' ';
@@ -117,9 +117,10 @@ public class TicTacToe {
     if (this.currentPlayer == CellValue.EMPTY ||this.currentPlayer == CellValue.O){
       return CellValue.X;
     }
-    else if (this.currentPlayer == CellValue.x)  {
-      return CellValue.X;
+    else if (this.currentPlayer == CellValue.X)  {
+      return CellValue.O;
     }
+    return CellValue.INVALID;
   }
 
   /**
@@ -201,7 +202,7 @@ public class TicTacToe {
   public String[] show() {
 
     // YOUR CODE HERE
-
+    return null;
   }
 
   /**
@@ -240,6 +241,7 @@ public class TicTacToe {
 
     // YOUR CODE HERE
     // HINT: use checkForWinner(position)
+    return null;
   }
 
   /**
@@ -255,46 +257,254 @@ public class TicTacToe {
    *         the game is still being played.
    */
   private GameState checkForWinner(int position) {
-    boolean win = false;
+    boolean horizontalRight = true;
+    boolean horizontaLeft = true;
+    boolean upRight = true;
+    boolean upLeft = true;
+    boolean downRight = true;
+    boolean downLeft = true;
+    boolean up = true;
+    boolean down = true;
     int row = (position -1) / this.numColumns;
     int counter = 0;
-    if(this.currentPlayer == 'X'){
-      //Check Horizontal
-    
-      for(int i = 1; i < this.sizeToWin; i++){
+    int increment = 0;
 
-        if(valueAt(position + i) == CellValue.X){
+
+    if(this.currentPlayer == CellValue.X){
+      //Check Horizontal
+      for(int i = 1; i < this.sizeToWin; i++){
+        if(valueAt(position + i) == CellValue.X && horizontalRight){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        else if(valueAt(position - i) == CellValue.X && horizontaLeft){
           counter += 1;
           if (counter == this.sizeToWin){
             return GameState.XWIN;
           }
         }
         else if (valueAt(position + i) != CellValue.X || ((position - 1 + i) / this.numColumns) != row){
-          
+          horizontalRight = false;
         }
-        
-
+        else if (valueAt(position - i) != CellValue.X || ((position - 1 - i) / this.numColumns) != row){
+          horizontaLeft = false;
+        }
       }
 
-
-
-
-
-
-
-    }
+      //Check Vertical
+      increment = 0;
+      counter = 0;
+      for(int i = 1; i < this.sizeToWin; i++){
+        increment = i * this.numColumns;
+        if(valueAt(position + increment) == CellValue.X && up){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        if(valueAt(position - increment) == CellValue.X && down){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        if (valueAt(position + increment) != CellValue.X){
+          up = false;
+        }
+        if (valueAt(position - increment) != CellValue.X ){
+          down = false;
+        }
       }
-      
-      
-    }
-    while(win == true){
-      //Check for horizontal
+
+      //Check forward diagonal
+      increment = 0;
+      counter = 0;
+      for(int i = 1; i < this.sizeToWin; i++){
+        increment = i * (this.numColumns - 1);
+        if(valueAt(position + increment) == CellValue.X && downLeft){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        if(valueAt(position - increment) == CellValue.X && upRight){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        if (valueAt(position + increment) != CellValue.X){
+          downLeft = false;
+        }
+        if (valueAt(position - increment) != CellValue.X ){
+          upRight = false;
+        }
+      }
+
+      //Check backward diagonal
+      increment = 0;
+      counter = 0;
+      for(int i = 1; i < this.sizeToWin; i++){
+        increment = i * (this.numColumns+1);
+        if(valueAt(position + increment) == CellValue.X && downRight){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        if(valueAt(position - increment) == CellValue.X && upLeft){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        if (valueAt(position + increment) != CellValue.X){
+          downRight = false;
+        }
+        if (valueAt(position - increment) != CellValue.X ){
+          upLeft = false;
+        }
+      }
+
+      counter = 0;
+      for(int i = 0; i < this.board.length; i++){
+        if(valueAt(i+1) == CellValue.EMPTY){
+          return GameState.PLAYING;
+        }
+        else{
+          counter += 1;
+          if(counter == this.board.length){
+            return GameState.DRAW;
+          }
+        }
+      }
 
     }
-    // YOUR CODE HERE
-    // HINT: call this within your `play` method
 
+    if(this.currentPlayer == CellValue.O){
+      //Check Horizontal
+      for(int i = 1; i < this.sizeToWin; i++){
+        if(valueAt(position + i) == CellValue.O && horizontalRight){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        else if(valueAt(position - i) == CellValue.O && horizontaLeft){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        else if (valueAt(position + i) != CellValue.O || ((position - 1 + i) / this.numColumns) != row){
+          horizontalRight = false;
+        }
+        else if (valueAt(position - i) != CellValue.O || ((position - 1 - i) / this.numColumns) != row){
+          horizontaLeft = false;
+        }
+      }
+
+      //Check Vertical
+      increment = 0;
+      counter = 0;
+      for(int i = 1; i < this.sizeToWin; i++){
+        increment = i * this.numColumns;
+        if(valueAt(position + increment) == CellValue.O && up){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        if(valueAt(position - increment) == CellValue.O && down){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        if (valueAt(position + increment) != CellValue.O){
+          up = false;
+        }
+        if (valueAt(position - increment) != CellValue.O ){
+          down = false;
+        }
+      }
+
+      //Check forward diagonal
+      increment = 0;
+      counter = 0;
+      for(int i = 1; i < this.sizeToWin; i++){
+        increment = i * (this.numColumns - 1);
+        if(valueAt(position + increment) == CellValue.O && downLeft){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        if(valueAt(position - increment) == CellValue.O && upRight){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        if (valueAt(position + increment) != CellValue.O){
+          downLeft = false;
+        }
+        if (valueAt(position - increment) != CellValue.O){
+          upRight = false;
+        }
+      }
+
+      //Check backward diagonal
+      increment = 0;
+      counter = 0;
+      for(int i = 1; i < this.sizeToWin; i++){
+        increment = i * (this.numColumns+1);
+        if(valueAt(position + increment) == CellValue.O && downRight){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        if(valueAt(position - increment) == CellValue.O && upLeft){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.OWIN;
+          }
+        }
+        if (valueAt(position + increment) != CellValue.O){
+          downRight = false;
+        }
+        if (valueAt(position - increment) != CellValue.O ){
+          upLeft = false;
+        }
+      }
+
+      counter = 0;
+      for(int i = 0; i < this.board.length; i++){
+        if(valueAt(i+1) == CellValue.EMPTY){
+          return GameState.PLAYING;
+        }
+        else{
+          counter += 1;
+          if(counter == this.board.length){
+            return GameState.DRAW;
+          }
+        }
+      }
+
+    }
+  // HINT: call this within your `play` method
+  return null;
   }
+      
+      
+    
+  
+    
+
+  
 
   /**
    * A text based representation of the 2D grid, and
