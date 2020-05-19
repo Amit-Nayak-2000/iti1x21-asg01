@@ -513,7 +513,7 @@ public class TicTacToe {
           cellPosition = ((i * this.numColumns) + j);
           //following statement is evaluated when at the last slot in a row
           if (j == this.numColumns - 1){
-            slot += " " + this.board[cellPosition] +" " + "\n";
+            slot += " " + this.board[cellPosition] +" ";
           }
           //following statement is evaluated normally
           else{
@@ -527,7 +527,7 @@ public class TicTacToe {
           cellPosition = ((i * this.numColumns) + j);
           //following statement is evaluated when at the last slot in a row
           if (j == this.numColumns - 1){
-            slot += " " + this.board[cellPosition] +" " + "\n";
+            slot += " " + this.board[cellPosition] +" \n" ;
           }
           //following statement is evaluated normally
           else{
