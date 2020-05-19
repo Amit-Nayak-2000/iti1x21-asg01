@@ -280,8 +280,7 @@ public class TicTacToe {
         }
         
         this.board[position - 1] = 'X';
-        // this.currentPlayer = nextPlayer();
-
+        this.numRounds+= 1;
         
         if(checkForWinner(position) == GameState.XWIN){
           this.gameState = GameState.XWIN;
@@ -306,7 +305,7 @@ public class TicTacToe {
       if (this.currentPlayer == CellValue.O) {
 
         this.board[position - 1] = 'O';
-        // this.currentPlayer = nextPlayer();
+        this.numRounds+= 1;
         
 
         if(checkForWinner(position) == GameState.OWIN){
