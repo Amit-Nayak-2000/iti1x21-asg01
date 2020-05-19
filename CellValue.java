@@ -9,7 +9,6 @@
  */
 
 public enum CellValue {
-
-	// YOUR CODE HERE
-
+	INVALID, EMPTY, X, O
 }
+

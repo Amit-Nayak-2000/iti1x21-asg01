@@ -9,7 +9,6 @@
  */
 
 public enum GameState{
-
-	// YOUR CODE HERE
-
+	PLAYING, DRAW, XWIN, OWIN
 }
+

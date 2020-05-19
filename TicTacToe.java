@@ -29,39 +29,39 @@ public class TicTacToe {
    *  9  | 10  | 11 | 12
    *
    */
-  board;
+  char[] board;
 
   /**
    * The number of rows in your grid.
    */
-  numRows;
+  int numRows;
 
   /**
    * The number of columns in your grid.
    */
-  numColumns;
+  int numColumns;
 
   /**
    * How many rounds have the players played so far.
    */
-  numRounds;
+  int numRounds;
 
   /**
    * What is the current state of the game
    */
-  gameState;
+  String gameState;
 
   /**
    * How many cells of the same type must be
    * aligned (vertically, horizontally, or diagonally)
    * to determine a winner of the game
    */
-  sizeToWin;
+  int sizeToWin;
 
   /**
    * Who is the current player?
    */
-  currentPlayer;
+  char currentPlayer;
 
 
   /**
@@ -69,9 +69,17 @@ public class TicTacToe {
    * should be a 3x3 grid with 3 cells in a row to win.
    */
   public TicTacToe() {
+    this.board = new char[9];
+    this.numColumns = 3;
+    this.numRows = 3;
+    this.numRounds = 0;
+    this.sizeToWin = 3;
+    this.gameState = "PLAYING";
+    this.currentPlayer = 'X';
 
-    // YOUR CODE HERE
-
+    for (int i = 0; i < 9; i++){
+      this.board[i] = ' ';
+    }
   }
 
   /**
@@ -83,8 +91,17 @@ public class TicTacToe {
    * @param aSizeToWin the number of cells that must be aligned to win.
    */
   public TicTacToe(int aNumRows, int aNumColumns, int aSizeToWin) {
+    this.board = new char[(aNumColumns * aNumRows)];
+    this.numColumns = aNumColumns;
+    this.numRows = aNumRows;
+    this.numRounds = 0;
+    this.sizeToWin = aSizeToWin;
+    this.gameState = "PLAYING";
+    this.currentPlayer = 'X';
 
-    // YOUR CODE HERE
+    for (int i = 0; i < (aNumColumns * aNumRows); i++){
+      this.board[i] = ' ';
+    }
 
   }
 
@@ -97,9 +114,12 @@ public class TicTacToe {
    * @return The player that should play next.
    */
   public CellValue nextPlayer() {
-
-    // YOUR CODE HERE
-
+    if (this.currentPlayer == CellValue.EMPTY ||this.currentPlayer == CellValue.O){
+      return CellValue.X;
+    }
+    else if (this.currentPlayer == CellValue.x)  {
+      return CellValue.X;
+    }
   }
 
   /**
@@ -120,9 +140,18 @@ public class TicTacToe {
    * @return The CellValue at that position
    */
   public CellValue valueAt(int position) {
-
-    // YOUR CODE HERE
-
+     if (this.board[position -1] == 'X'){
+       return CellValue.X;
+     }
+     else if (this.board[position -1] == 'O'){
+       return CellValue.O;
+     }
+     else if ((position - 1) < 0 || (position - 1) > ((this.numRows * this.numColumns) -1)){
+       return CellValue.INVALID;
+     }
+     else {
+       return CellValue.EMPTY;
+     }
   }
 
   /**
@@ -132,7 +161,7 @@ public class TicTacToe {
    * ----------------------------------
    *  [2,1]  | [2,2]  | [2,3]  | [2,4]
    * ----------------------------------
-   *  [3,1]  | [3,2]  | [3,3] | [2,4]
+   *  [3,1]  | [3,2]  | [3,3] | [3,4]
    *
    * Note that the input is 1-based (HINT: arrays are 0-based)
    *
@@ -143,7 +172,20 @@ public class TicTacToe {
    */
   public CellValue valueAt(int row, int column) {
 
-    // YOUR CODE HERE
+    int position = (((row - 1) * this.numColumns) + column);
+
+    if (this.board[position -1] == 'X'){
+       return CellValue.X;
+     }
+     else if (this.board[position -1] == 'O'){
+       return CellValue.O;
+     }
+     else if ((position - 1) < 0 || (position - 1) > ((this.numRows * this.numColumns) -1)){
+       return CellValue.INVALID;
+     }
+     else {
+       return CellValue.EMPTY;
+     }
 
   }
 
@@ -195,9 +237,9 @@ public class TicTacToe {
    */
   public String play(int position) {
 
+
     // YOUR CODE HERE
     // HINT: use checkForWinner(position)
-
   }
 
   /**
@@ -213,7 +255,42 @@ public class TicTacToe {
    *         the game is still being played.
    */
   private GameState checkForWinner(int position) {
+    boolean win = false;
+    int row = (position -1) / this.numColumns;
+    int counter = 0;
+    if(this.currentPlayer == 'X'){
+      //Check Horizontal
+    
+      for(int i = 1; i < this.sizeToWin; i++){
 
+        if(valueAt(position + i) == CellValue.X){
+          counter += 1;
+          if (counter == this.sizeToWin){
+            return GameState.XWIN;
+          }
+        }
+        else if (valueAt(position + i) != CellValue.X || ((position - 1 + i) / this.numColumns) != row){
+          
+        }
+        
+
+      }
+
+
+
+
+
+
+
+    }
+      }
+      
+      
+    }
+    while(win == true){
+      //Check for horizontal
+
+    }
     // YOUR CODE HERE
     // HINT: call this within your `play` method
 
@@ -224,7 +301,7 @@ public class TicTacToe {
    * should include all played Xs and Os.  For example
    * On a 3x3 board.  (HINT: \n for newlines)
    *
-   *    | X |
+   *    | X | O
    * -----------
    *  O |   |
    * -----------
@@ -233,8 +310,49 @@ public class TicTacToe {
    * @return String representation of the game
    */
   public String toString() {
+    String slot = "";
+    int cellPosition; // = (((row - 1) * number of col.) + column) - 1
 
-    // YOUR CODE HERE
+    for(int i = 0; i < this.numRows; i++){
+      //following statement is evalulated when at the last row (no divider)
+      if(i == this.numRows -1){
+        for (int j = 0; j < this.numColumns; j++){
+          cellPosition = ((i * this.numColumns) + j);
+          //following statement is evaluated when at the last slot in a row
+          if (j == this.numColumns - 1){
+            slot += " " + this.board[cellPosition] +" " + "\n";
+          }
+          //following statement is evaluated normally
+          else{
+            slot += " " + this.board[cellPosition] +" |";
+          }
+        }
+      }
+      //following statement is evaulated normally
+      else{
+        for (int j = 0; j < this.numColumns; j++){
+          cellPosition = ((i * this.numColumns) + j);
+          //following statement is evaluated when at the last slot in a row
+          if (j == this.numColumns - 1){
+            slot += " " + this.board[cellPosition] +" " + "\n";
+          }
+          //following statement is evaluated normally
+          else{
+            slot += " " + this.board[cellPosition] +" |";
+          }
+        }
+        for (int k = 0; k < this.numColumns; k++){
+          if(k == this.numColumns -1){
+            slot += "---" + "\n";
+          }
+          else{
+            slot += "----";
+          }
+        }
+      }
+    }
+
+    return slot;
 
   }
 
