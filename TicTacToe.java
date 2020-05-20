@@ -180,18 +180,18 @@ public class TicTacToe {
 
     int position = (((row - 1) * this.numColumns) + column) - 1;
 
+    if (position < 0 || position > ((this.board.length) - 1)){
+       return CellValue.INVALID;
+    }
     if (this.board[position] == 'X'){
        return CellValue.X;
      }
-     else if (this.board[position] == 'O'){
+    if (this.board[position] == 'O'){
        return CellValue.O;
-     }
-     else if ((position) < 0 || (position) > ((this.numRows * this.numColumns) -1)){
-       return CellValue.INVALID;
-     }
-     else {
+    }
+    else {
        return CellValue.EMPTY;
-     }
+    }
 
   }
 
@@ -258,7 +258,6 @@ public class TicTacToe {
    * @return A message about the current play (see tests for details)
    */
   public String play(int position) {
-    // position = position -1;
     String message = "";
     if(valueAt(position) == CellValue.INVALID){
       message = "The value should be between 1 and " + this.board.length;
@@ -281,6 +280,11 @@ public class TicTacToe {
         
         this.board[position - 1] = 'X';
         this.numRounds+= 1;
+
+        if(this.gameState == GameState.OWIN){
+          this.currentPlayer = nextPlayer();
+          return null;
+        }
         
         if(checkForWinner(position) == GameState.XWIN){
           this.gameState = GameState.XWIN;
@@ -307,6 +311,10 @@ public class TicTacToe {
         this.board[position - 1] = 'O';
         this.numRounds+= 1;
         
+        if(this.gameState == GameState.XWIN){
+          this.currentPlayer = nextPlayer();
+          return null;
+        }
 
         if(checkForWinner(position) == GameState.OWIN){
           this.gameState = GameState.OWIN;
@@ -424,24 +432,25 @@ public class TicTacToe {
     counter = 1;
     for(int i = 1; i < this.sizeToWin; i++){
       increment = i * (this.numColumns - 1);
-      if(valueAt(position + increment) == check && downLeft){
-        counter += 1;
-        if (counter == this.sizeToWin){
-          return state;
-        }
-      }
-      if(valueAt(position - increment) == check && upRight){
-        counter += 1;
-        if (counter == this.sizeToWin){
-          return state;
-        }
-      }
-      if (valueAt(position + increment) != check){
+      if (valueAt(position + increment) != check || ((position - 1 + increment - (this.numColumns - 1)) / this.numColumns) == ((position - 1 + increment) / this.numColumns)){
         downLeft = false;
       }
-      if (valueAt(position - increment) != check ){
+      if (valueAt(position - increment) != check || ((position - 1 - increment + (this.numColumns - 1)) / this.numColumns) == ((position - 1 - increment) / this.numColumns)){
         upRight = false;
       }
+      if(valueAt(position + increment) == check && downLeft == true){
+        counter += 1;
+        if (counter == this.sizeToWin){
+          return state;
+        }
+      }
+      if(valueAt(position - increment) == check && upRight == true){
+        counter += 1;
+        if (counter == this.sizeToWin){
+          return state;
+        }
+      }
+      
     }
 
     //Check backward diagonal
@@ -449,24 +458,25 @@ public class TicTacToe {
     counter = 1;
     for(int i = 1; i < this.sizeToWin; i++){
       increment = i * (this.numColumns+1);
-      if(valueAt(position + increment) == check && downRight){
-        counter += 1;
-        if (counter == this.sizeToWin){
-          return state;
-        }
-      }
-      if(valueAt(position - increment) == check && upLeft){
-        counter += 1;
-        if (counter == this.sizeToWin){
-          return state;
-        }
-      }
-      if (valueAt(position + increment) != check){
+      if (valueAt(position + increment) != check || ((position - 1 + increment - (this.numColumns + 1)) / this.numColumns) == ((position - 1 + increment) / this.numColumns)){
         downRight = false;
       }
-      if (valueAt(position - increment) != check){
+      if (valueAt(position - increment) != check || ((position - 1 - increment + (this.numColumns + 1)) / this.numColumns) == ((position - 1 - increment) / this.numColumns)){
         upLeft = false;
       }
+      if(valueAt(position + increment) == check && downRight == true){
+        counter += 1;
+        if (counter == this.sizeToWin){
+          return state;
+        }
+      }
+      if(valueAt(position - increment) == check && upLeft == true){
+        counter += 1;
+        if (counter == this.sizeToWin){
+          return state;
+        }
+      }
+      
     }
 
     counter = 0;
@@ -481,9 +491,6 @@ public class TicTacToe {
         }
       }
     }
-
-  
-  // HINT: call this within your `play` method
   return null;
   }
       
