@@ -216,10 +216,10 @@ public class TicTacToe {
     if (this.gameState == GameState.DRAW){
       view[1] = "Result: DRAW";
     }
-    if (this.currentPlayer == CellValue.X || this.currentPlayer == CellValue.EMPTY){
+    if (nextPlayer() == CellValue.X){
       view[1] = "X to play: ";
     }
-    if (this.currentPlayer == CellValue.O) {
+    if (nextPlayer()  == CellValue.O) {
       view[1] = "O to play: ";
     }
     
@@ -272,11 +272,11 @@ public class TicTacToe {
       return message;
     }
     else{
-      if (this.currentPlayer == CellValue.X || this.currentPlayer == CellValue.EMPTY) {
+      if (nextPlayer() == CellValue.X) {
 
-        if( this.currentPlayer == CellValue.EMPTY){
-          this.currentPlayer = nextPlayer();
-        }
+        // if( this.currentPlayer == CellValue.EMPTY){
+        //   this.currentPlayer = nextPlayer();
+        // }
         
         this.board[position - 1] = 'X';
         this.numRounds+= 1;
@@ -306,7 +306,7 @@ public class TicTacToe {
       }
       
 
-      if (this.currentPlayer == CellValue.O) {
+      if (nextPlayer() == CellValue.O) {
 
         this.board[position - 1] = 'O';
         this.numRounds+= 1;
@@ -368,12 +368,12 @@ public class TicTacToe {
     CellValue check = CellValue.EMPTY;
     GameState state = GameState.PLAYING;
 
-    if(this.currentPlayer == CellValue.X){
+    if(nextPlayer() == CellValue.X){
       check = CellValue.X;
       state = GameState.XWIN;
     }
 
-    if(this.currentPlayer == CellValue.O){
+    if(nextPlayer() == CellValue.O){
       check = CellValue.O;
       state = GameState.OWIN;
     }
