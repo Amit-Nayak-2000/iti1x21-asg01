@@ -145,7 +145,9 @@ public class TicTacToe {
    * @return The CellValue at that position
    */
   public CellValue valueAt(int position) {
+    //converts 'play position' to 'array position'
     position = position -1;
+
     if (position < 0 || position > ((this.board.length) - 1)){
        return CellValue.INVALID;
      }
@@ -178,6 +180,9 @@ public class TicTacToe {
    */
   public CellValue valueAt(int row, int column) {
 
+    /*2D position position converted to 1D position,
+    * valid for all sizes of arrays
+    */
     int position = (((row - 1) * this.numColumns) + column) - 1;
 
     if (position < 0 || position > ((this.board.length) - 1)){
@@ -206,6 +211,7 @@ public class TicTacToe {
    */
   public String[] show() {
     String[] view = new String[2];
+    //First part of string is visual representation of board, second part based on game state
     view[0] = toString();
     if (this.gameState == GameState.XWIN){
       view[1] = "Result: XWIN";
@@ -259,29 +265,34 @@ public class TicTacToe {
    */
   public String play(int position) {
     String message = "";
+    //Following section for invalid positions.
     if(valueAt(position) == CellValue.INVALID){
       message = "The value should be between 1 and " + this.board.length;
       return message;
     }
-    if(valueAt(position) == CellValue.X){
+    else if(valueAt(position) == CellValue.X){
       message = "Cell " + position + " has already been played with X";
       return message;
     }
-    if(valueAt(position) == CellValue.O){
+    else if(valueAt(position) == CellValue.O){
       message = "Cell " + position + " has already been played with O";
       return message;
     }
+    //Following section for valid positions.
     else{
+      //Following section executes if x plays.
       if (nextPlayer() == CellValue.X) {
         
         this.board[position - 1] = 'X';
         this.numRounds+= 1;
 
+        //if win occurs, doesnt change game state.
         if(this.gameState == GameState.OWIN || this.gameState == GameState.XWIN){
           this.currentPlayer = nextPlayer();
           return null;
         }
         
+        //following if statements update game state, change current player and prompts user regarding game state.
         if(checkForWinner(position) == GameState.XWIN){
           this.gameState = GameState.XWIN;
           this.currentPlayer = nextPlayer();
@@ -301,7 +312,7 @@ public class TicTacToe {
         }
       }
       
-
+      //Following section executes if x plays.
       if (nextPlayer() == CellValue.O) {
 
         this.board[position - 1] = 'O';
