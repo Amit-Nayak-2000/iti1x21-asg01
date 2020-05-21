@@ -8,10 +8,6 @@
  * Originally written by Guy-Vincent Jourdan, University of Ottawa
  */
 public class TicTacToe {
-
-  // FINISH THE VARIABLE DECLARATION
-  // then remove this comment
-
   /**
    * The internal representation of the board
    * as a one dimensional array, but visualized
@@ -77,6 +73,7 @@ public class TicTacToe {
     this.gameState = GameState.PLAYING;
     this.currentPlayer = CellValue.EMPTY;
 
+    //Makes the board empty
     for (int i = 0; i < 9; i++){
       this.board[i] = ' ';
     }
@@ -99,6 +96,7 @@ public class TicTacToe {
     this.gameState = GameState.PLAYING;
     this.currentPlayer = CellValue.EMPTY;
 
+    //Makes the board empty
     for (int i = 0; i < (aNumColumns * aNumRows); i++){
       this.board[i] = ' ';
     }
@@ -114,17 +112,19 @@ public class TicTacToe {
    * @return The player that should play next.
    */
   public CellValue nextPlayer() {
-    CellValue value = CellValue.EMPTY;
+    
     if (this.currentPlayer == CellValue.EMPTY){ 
-      value = CellValue.X;
+      return CellValue.X;
     }
     if (this.currentPlayer == CellValue.O){
-      value = CellValue.X;
+      return CellValue.X;
     }
     if (this.currentPlayer == CellValue.X) {
-      value = CellValue.O;
+      return CellValue.O;
     }
-    return value;
+    else{
+      return null;
+    }
   }
 
   /**
@@ -273,15 +273,11 @@ public class TicTacToe {
     }
     else{
       if (nextPlayer() == CellValue.X) {
-
-        // if( this.currentPlayer == CellValue.EMPTY){
-        //   this.currentPlayer = nextPlayer();
-        // }
         
         this.board[position - 1] = 'X';
         this.numRounds+= 1;
 
-        if(this.gameState == GameState.OWIN){
+        if(this.gameState == GameState.OWIN || this.gameState == GameState.XWIN){
           this.currentPlayer = nextPlayer();
           return null;
         }
@@ -311,7 +307,7 @@ public class TicTacToe {
         this.board[position - 1] = 'O';
         this.numRounds+= 1;
         
-        if(this.gameState == GameState.XWIN){
+        if(this.gameState == GameState.XWIN || this.gameState == GameState.OWIN){
           this.currentPlayer = nextPlayer();
           return null;
         }
