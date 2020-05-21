@@ -294,7 +294,7 @@ public class TicTacToe {
           return null;
         }
         
-        //following if statements update game state, change current player and prompts user regarding game state.
+        //following if statements check if there is a winner or not, then update game state, change current player and prompts user regarding game state.
         if(checkForWinner(position) == GameState.XWIN){
           this.gameState = GameState.XWIN;
           this.currentPlayer = nextPlayer();
@@ -314,19 +314,19 @@ public class TicTacToe {
         }
       }
       
-      //Following section executes if x plays.
+      //Following section executes if o plays.
       if (nextPlayer() == CellValue.O) {
-
+        //Adds their play to the board array and increments the round counter.
         this.board[position - 1] = 'O';
         this.numRounds+= 1;
         
-        //Adds their play to the board array and increments the round counter.
+        //If there is already a winner, doesnt change game state
         if(this.gameState == GameState.XWIN || this.gameState == GameState.OWIN){
           this.currentPlayer = nextPlayer();
           return null;
         }
 
-        //following if statements update game state, change current player and prompts user regarding game state.
+        //following if statements check if there is a winner or not, then update game state, change current player and prompts user regarding game state.
         if(checkForWinner(position) == GameState.OWIN){
           this.gameState = GameState.OWIN;
           this.currentPlayer = nextPlayer();
@@ -532,7 +532,7 @@ public class TicTacToe {
     }
 
     counter = 0;
-    //checks for a draw, if a cell value is empty it will keep the gamestate as playing, if the board is full and no winner has been found the game state is a draw.
+    //checks for a draw. If a cell value is empty it will keep the gamestate as playing; if the board is full and no winner has been found the game state is a draw.
     for(int i = 0; i < this.board.length; i++){
       if(valueAt(i+1) == CellValue.EMPTY){
         return GameState.PLAYING;
