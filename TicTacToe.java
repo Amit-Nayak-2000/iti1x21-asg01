@@ -365,20 +365,30 @@ public class TicTacToe {
    *         the game is still being played.
    */
   private GameState checkForWinner(int position) {
+    //The following booleans are used to ensure that the next cell, in the direction being checked, is to be counted towards a potential win.
+    //the following are used to check for a horizontal -
     boolean horizontalRight = true;
     boolean horizontaLeft = true;
+    //the following are used to check for a forward diagonal: /
     boolean upRight = true;
+    boolean downLeft = true;
+    //the following are used to check for a backward diagonal: \
     boolean upLeft = true;
     boolean downRight = true;
-    boolean downLeft = true;
+    //the following are used to check for a vertical |
     boolean up = true;
     boolean down = true;
+    //the position's row is precalculated and will be used to compare to subsequent values in the array.
     int row = (position - 1) / this.numColumns;
+    //The counter is used to count how many Xs or Os are in a row, the counter starts at 1 because we are checking after a play.
     int counter = 1;
+    //an increment value is used for checking the different cases eg: vertical, forward diagonal, etc.
     int increment = 0;
+    //check is the cell value to compared to based on the player, the state is who wins based on who played. 
     CellValue check = CellValue.EMPTY;
     GameState state = GameState.PLAYING;
 
+  
     if(nextPlayer() == CellValue.X){
       check = CellValue.X;
       state = GameState.XWIN;
@@ -392,13 +402,19 @@ public class TicTacToe {
 
     
     //Check Horizontal
+    //iterates from 1 till size of win. Checks both directions simultaneously. 
+    //if a cell is not in the same row or does not have desired value, the boolean in that direction is set to false and the program stops checking in that direction.
     for(int i = 1; i < this.sizeToWin; i++){
+      //The following 2 if statements detect if the cell value in the next horizontal position (both directions) is invalid
       if (valueAt(position + i) != check || (((position - 1) + i) / this.numColumns) != row){
         horizontalRight = false;
       }
       if (valueAt(position - i) != check || (((position - 1) - i) / this.numColumns) != row){
         horizontaLeft = false;
       }
+      
+      //the following 2 if statements will increment the counter if the next cell value is valid (both directions) 
+      //if the counter reaches the size to win it will return which player won.
       if(valueAt(position + i) == check && horizontalRight == true){
         counter += 1;
         if (counter == this.sizeToWin){
@@ -415,41 +431,57 @@ public class TicTacToe {
     }
 
     //Check Vertical
+    //iterates from 1 till size of win. Checks both directions simultaneously. 
+    //if a cell does not have desired value, the boolean in that direction is set to false and the program stops checking in that direction.
     increment = 0;
     counter = 1;
     for(int i = 1; i < this.sizeToWin; i++){
+      //The increment is set to the number of columns to ensure that the program checks in the same column.
       increment = i * this.numColumns;
-      if(valueAt(position + increment) == check && up == true){
-        counter += 1;
-        if (counter == this.sizeToWin){
-          return state;
-        }
-      }
-      if(valueAt(position - increment) == check && down == true){
-        counter += 1;
-        if (counter == this.sizeToWin){
-          return state;
-        }
-      }
+
+      //The following 2 if statements detect if the cell value in the next vertical position (both directions) is invalid
       if (valueAt(position + increment) != check){
-        up = false;
+        down = false;
       }
       if (valueAt(position - increment) != check ){
-        down = false;
+        up = false;
+      }
+
+      //the following 2 if statements will increment the counter if the next cell value is valid (both directions) 
+      //if the counter reaches the size to win it will return which player won.
+      if(valueAt(position + increment) == check && down == true){
+        counter += 1;
+        if (counter == this.sizeToWin){
+          return state;
+        }
+      }
+      if(valueAt(position - increment) == check && up == true){
+        counter += 1;
+        if (counter == this.sizeToWin){
+          return state;
+        }
       }
     }
 
     //Check forward diagonal
+    //iterates from 1 till size of win. Checks both directions simultaneously. 
+    //if a cell does not have desired value or is not in the same diagonal, the boolean in that direction is set to false and the program stops checking in that direction.
     increment = 0;
     counter = 1;
     for(int i = 1; i < this.sizeToWin; i++){
+      //the increment is set to num of columns - 1 to traverse the board in a forward diagonal
       increment = i * (this.numColumns - 1);
+
+      //The following 2 if statements detect if the cell value in the next forward diagonal position (both directions) is invalid or if it is not in the same diagonal
       if (valueAt(position + increment) != check || ((position - 1 + increment - (this.numColumns - 1)) / this.numColumns) == ((position - 1 + increment) / this.numColumns)){
         downLeft = false;
       }
       if (valueAt(position - increment) != check || ((position - 1 - increment + (this.numColumns - 1)) / this.numColumns) == ((position - 1 - increment) / this.numColumns)){
         upRight = false;
       }
+
+      //the following 2 if statements will increment the counter if the next cell value is valid (both directions) 
+      //if the counter reaches the size to win it will return which player won.
       if(valueAt(position + increment) == check && downLeft == true){
         counter += 1;
         if (counter == this.sizeToWin){
@@ -466,16 +498,24 @@ public class TicTacToe {
     }
 
     //Check backward diagonal
+    //iterates from 1 till size of win. Checks both directions simultaneously. 
+    //if a cell does not have desired value or is not in the same diagonal, the boolean in that direction is set to false and the program stops checking in that direction.
     increment = 0;
     counter = 1;
     for(int i = 1; i < this.sizeToWin; i++){
+      //the increment is set to num of columns - 1 to traverse the board in a forward diagonal
       increment = i * (this.numColumns+1);
+
+      //The following 2 if statements detect if the cell value in the next backward diagonal position (both directions) is invalid or if it is not in the same diagonal
       if (valueAt(position + increment) != check || ((position - 1 + increment - (this.numColumns + 1)) / this.numColumns) == ((position - 1 + increment) / this.numColumns)){
         downRight = false;
       }
       if (valueAt(position - increment) != check || ((position - 1 - increment + (this.numColumns + 1)) / this.numColumns) == ((position - 1 - increment) / this.numColumns)){
         upLeft = false;
       }
+
+      //the following 2 if statements will increment the counter if the next cell value is valid (both directions) 
+      //if the counter reaches the size to win it will return which player won.
       if(valueAt(position + increment) == check && downRight == true){
         counter += 1;
         if (counter == this.sizeToWin){
@@ -492,6 +532,7 @@ public class TicTacToe {
     }
 
     counter = 0;
+    //checks for a draw, if a cell value is empty it will keep the gamestate as playing, if the board is full and no winner has been found the game state is a draw.
     for(int i = 0; i < this.board.length; i++){
       if(valueAt(i+1) == CellValue.EMPTY){
         return GameState.PLAYING;
